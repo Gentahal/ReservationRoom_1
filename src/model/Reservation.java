@@ -6,6 +6,7 @@ public class Reservation {
     private String date;
     private String startTime;
     private String endTime;
+    private String status = "PENDING";
 
     public Reservation(AbstractUser user, Room room, String date, String startTime, String endTime) {
         this.user = user;
@@ -13,6 +14,7 @@ public class Reservation {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.status = "PENDING";
     }
 
     public AbstractUser getUser() {
@@ -39,9 +41,17 @@ public class Reservation {
         return endTime;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return user.getName() + " memesan " + room.getName() + " pada " + date;
+        return user.getName() + " memesan " + room.getName() + " pada " + date + " | Status : " + status;
     }
 
 }

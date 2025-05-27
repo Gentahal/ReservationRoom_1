@@ -5,6 +5,7 @@ import java.util.*;
 public class ReservationSystem {
     private List<Room> rooms = new ArrayList<>();
     private List<Reservation> reservations = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
     public void start(AbstractUser user) {
@@ -16,6 +17,8 @@ public class ReservationSystem {
                 System.out.println("3. Hapus Ruangan");
                 System.out.println("4. Lihat Reservasi");
                 System.out.println("5. Logout");
+                System.out.println();
+                System.out.println("Masukkan Pilihan anda > ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
@@ -36,7 +39,10 @@ public class ReservationSystem {
                 System.out.println("2. Lihat Ruangan Yang Tersedia");
                 System.out.println("3. Pesan Ruangan");
                 System.out.println("4. Lihat Reservasi Saya");
-                System.out.println("5. Logout");
+                System.out.println("5. Bayar Reservasi");
+                System.out.println("6 Logout");
+                System.out.println();
+                System.out.println("Masukkan Pilihan anda > ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
@@ -45,7 +51,8 @@ public class ReservationSystem {
                     case 2 -> showRoomAvailability();
                     case 3 -> makeReservation(user);
                     case 4 -> showUserReservations(user);
-                    case 5 -> {
+                    case 5 -> processPayment(user);
+                    case 6 -> {
                         System.out.println("Logout...");
                         return;
                     }
@@ -142,7 +149,7 @@ public class ReservationSystem {
     private boolean isOverlap(String start1, String end1, String start2, String end2) {
         return start1.compareTo(end2) < 0 && start2.compareTo(end1) < 0;
     }
-s
+
     private void showUserReservations(AbstractUser user) {
         boolean found = false;
         for (Reservation r : reservations) {
@@ -182,4 +189,101 @@ s
         }
     }
 
+    private void processPayment(AbstractUser user) {
+        List<Reservation> userUnpaid = new ArrayList<>();
+
+        for (Reservation r : reservations) {
+            boolean isPaid = false;
+            for (Payment p : payments) {
+                if (p.getReservation() == r && p.isPaid()) {
+                    isPaid = true;
+                    break;
+                }
+            }
+
+            if (r.getUser().getName().equalsIgnoreCase(user.getName()) && !isPaid) {
+                userUnpaid.add(r);
+            }
+        }
+
+        if (userUnpaid.isEmpty()) {
+            System.out.println("✅ Tidak ada reservasi yang perlu dibayar.");
+            return;
+        }
+
+        System.out.println("\n📋 Reservasi Belum Dibayar:");
+        for (int i = 0; i < userUnpaid.size(); i++) {
+            System.out.println((i + 1) + ". " + userUnpaid.get(i));
+        }
+
+        System.out.print("Pilih reservasi yang ingin dibayar: ");
+        int pilihan = scanner.nextInt();
+        scanner.nextLine();
+
+        if (pilihan < 1 || pilihan > userUnpaid.size()) {
+            System.out.println("❌ Pilihan tidak valid.");
+            return;
+        }
+
+        Reservation selected = userUnpaid.get(pilihan - 1);
+
+        System.out.print("Masukkan metode pembayaran (GOPAY, DANA, CASH): ");
+        String metode = scanner.nextLine().toUpperCase();
+
+        // Generate kode pembayaran random misal: 8 digit alfanumerik
+        String kodeBayar = generatePaymentCode();
+
+        System.out.println("Kode pembayaran Anda: " + kodeBayar);
+
+        int kapasitas = selected.getRoom().getCapacity();
+        double harga;
+        if (kapasitas > 50) {
+            harga = 350000;
+        } else if (kapasitas > 30) {
+            harga = 200000;
+        } else if (kapasitas > 10) {
+            harga = 100000;
+        } else {
+            harga = 50000;
+        }
+
+        System.out.println("Total yang harus dibayar: Rp " + harga);
+
+        System.out.print("Masukkan jumlah pembayaran: Rp ");
+        double jumlahBayar = 0;
+
+        try {
+            jumlahBayar = Double.parseDouble(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Input tidak valid. Pembayaran dibatalkan.");
+            return;
+        }
+
+        if (jumlahBayar < harga) {
+            System.out.println("❌ Pembayaran gagal, uang yang dibayarkan kurang.");
+            return;
+        }
+
+        double kembalian = jumlahBayar - harga;
+
+        Payment pembayaranBaru = new Payment(selected);
+        payments.add(pembayaranBaru);
+
+        selected.setStatus("LUNAS");
+
+        System.out.println("✅ Pembayaran berhasil dengan metode " + metode + "!");
+        if (kembalian > 0) {
+            System.out.println("Kembalian Anda: Rp " + kembalian);
+        }
+    }
+
+    private String generatePaymentCode() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
 }
