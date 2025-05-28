@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class Reservation {
     private AbstractUser user;
     private Room room;
@@ -7,6 +9,7 @@ public class Reservation {
     private String startTime;
     private String endTime;
     private String status = "PENDING";
+    private LocalDateTime reservationTime;
 
     public Reservation(AbstractUser user, Room room, String date, String startTime, String endTime) {
         this.user = user;
@@ -15,6 +18,7 @@ public class Reservation {
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = "PENDING";
+        this.reservationTime = LocalDateTime.now();
     }
 
     public AbstractUser getUser() {
@@ -29,9 +33,13 @@ public class Reservation {
         return date;
     }
 
-//    public String getTimeSlot() {
-//        return timeSlot;
-//    }
+    public LocalDateTime getReservationTime() {
+        return reservationTime;
+    }
+
+    public boolean isPaymentExpired() {
+        return LocalDateTime.now().isAfter(reservationTime.plusMinutes(5));
+    }
 
     public String getStartTime(){
         return startTime;

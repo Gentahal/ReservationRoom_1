@@ -3,10 +3,12 @@ package model;
 public class Payment {
     private Reservation reservation;
     private boolean isPaid;
+    private String paymentCode;
 
-    public Payment(Reservation reservation) {
+    public Payment(Reservation reservation, String paymentCode) {
         this.reservation = reservation;
-        this.isPaid = false; // default: belum dibayar
+        this.isPaid = false;
+        this.paymentCode = paymentCode;
     }
 
     public Reservation getReservation() {
