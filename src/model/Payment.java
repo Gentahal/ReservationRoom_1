@@ -24,6 +24,6 @@ public class Payment {
     @Override
     public String toString() {
         return "Pembayaran untuk: " + reservation.toString() +
-                " | Status: " + (isPaid ? "LUNAS" : "BELUM LUNAS");
+                " | Status: " + (isPaid ? "LUNAS ✅" : "BELUM LUNAS ❌");
     }
 }

@@ -143,7 +143,7 @@ public class ReservationSystem {
 
         Reservation newReservation = new Reservation(user, selectedRoom, date, startTime, endTime);
         reservations.add(newReservation);
-        System.out.println("✅ Reservasi berhasil dilakukan!");
+        System.out.println("✅ Data ruangan telah masuk , STATUS PEMBAYARAN : " + newReservation.getStatus());
     }
 
     private boolean isOverlap(String start1, String end1, String start2, String end2) {
