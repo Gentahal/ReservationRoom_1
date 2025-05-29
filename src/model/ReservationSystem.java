@@ -67,7 +67,7 @@ public class ReservationSystem {
         }
     }
 
-    private void tambahRuangan() {
+    void tambahRuangan() {
         try {
             int id;
             while (true) {
@@ -157,7 +157,7 @@ public class ReservationSystem {
         return rooms.stream().noneMatch(room -> room.getId() == id);
     }
 
-    private void hapusRuangan() {
+    void hapusRuangan() {
         showRooms();
         System.out.print("Pilih nomor ruangan yang ingin dihapus: ");
         int index = scanner.nextInt();
@@ -170,7 +170,7 @@ public class ReservationSystem {
         }
     }
 
-    private void showRooms() {
+    void showRooms() {
         if (rooms.isEmpty()) {
             System.out.println("Belum ada ruangan.");
             return;
@@ -180,7 +180,7 @@ public class ReservationSystem {
         }
     }
 
-    private void showAllReservations() {
+    void showAllReservations() {
         if (reservations.isEmpty()) {
             System.out.println("Belum ada reservasi.");
             return;
@@ -297,7 +297,7 @@ public class ReservationSystem {
         return time.matches("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
     }
 
-    private void showUserReservations(AbstractUser user) {
+    void showUserReservations(AbstractUser user) {
         boolean found = false;
         for (Reservation r : reservations) {
             if (r.getUser().getName().equalsIgnoreCase(user.getName())) {
@@ -339,7 +339,7 @@ public class ReservationSystem {
         }
     }
 
-    private void processPayment(AbstractUser user) {
+    void processPayment(AbstractUser user) {
         List<Reservation> userUnpaid = new ArrayList<>();
 
         for (Reservation r : reservations) {
@@ -442,5 +442,17 @@ public class ReservationSystem {
 
     private String generatePaymentCode() {
         return "PAY-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    public List<Room> getRooms() {
+        return this.rooms;
+    }
+
+    public List<Reservation> getReservations() {
+        return this.reservations;
+    }
+
+    public List<Payment> getPayments() {
+        return this.payments;
     }
 }
