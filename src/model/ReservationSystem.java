@@ -67,18 +67,6 @@ public class ReservationSystem {
         }
     }
 
-//    private void tambahRuangan() {
-//        System.out.print("Masukkan ID Ruangan: ");
-//        int id = scanner.nextInt(); scanner.nextLine();
-//        System.out.print("Nama ruangan: ");
-//        String name = scanner.nextLine();
-//        System.out.print("Kapasitas: ");
-//        int cap = scanner.nextInt();
-//        scanner.nextLine();
-//        rooms.add(new Room(id,name, cap));
-//        System.out.println("Berhasil menambahkan ruangan.");
-//    }
-
     private void tambahRuangan() {
         try {
             int id;
@@ -291,7 +279,6 @@ public class ReservationSystem {
             scanner.nextLine();
         }
     }
-
 
     private boolean isOverlap(String start1, String end1, String start2, String end2) {
         return start1.compareTo(end2) < 0 && start2.compareTo(end1) < 0;
