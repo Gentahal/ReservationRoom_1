@@ -34,7 +34,7 @@ public class ReservationSystem {
                     case 4 -> showAllReservations();
                     case 5 -> {
                         System.out.println("Logout...");
-                        return; // keluar dari menu user & kembali ke login
+                        return;
                     }
                     default -> System.out.println("Pilihan salah");
                 }
