@@ -1,12 +1,16 @@
 package model;
 
 public class Room {
+
+
+    // Atribut
     private int id;
     private String name;
     private int capacity;
     private boolean isFree;
     private double price;
 
+    // COnstructor
     public Room(int id, String name, int capacity, boolean isFree, double price) {
         this.id = id;
         this.name = name;
@@ -15,6 +19,7 @@ public class Room {
         this.price = price;
     }
 
+    // Getter dan Setter
     public int getId() {
         return id;
     }
@@ -35,6 +40,7 @@ public class Room {
         return price;
     }
 
+    // Output Room
     @Override
     public String toString() {
         return name + " (Kapasitas: " + capacity + ") - " + (isFree ? "GRATIS" : "BERBAYAR - Rp" + price);

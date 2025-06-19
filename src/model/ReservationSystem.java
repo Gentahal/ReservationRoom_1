@@ -8,11 +8,13 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class ReservationSystem {
+    // Atribut serta collection ArrayList
     private List<Room> rooms = new ArrayList<>();
     private List<Reservation> reservations = new ArrayList<>();
     private List<Payment> payments = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
+    // MENU ADMIN
     public void start(AbstractUser user) {
         while (true) {
             System.out.println("\n--- Menu " + user.getRole().toUpperCase() + " ---");
@@ -27,6 +29,7 @@ public class ReservationSystem {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
+                // Pembuatan switch case untuk menu admin
                 switch (choice) {
                     case 1 -> tambahRuangan();
                     case 2 -> showRooms();
@@ -39,6 +42,7 @@ public class ReservationSystem {
                     default -> System.out.println("Pilihan salah");
                 }
 
+            // Menu dosen dan mahasiswa
             } else {
                 System.out.println("1. Lihat Ruangan");
                 System.out.println("2. Lihat Ruangan Yang Tersedia");
@@ -51,6 +55,7 @@ public class ReservationSystem {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
+                // Switch case untuk menu mahasiswa dan dosen
                 switch (choice) {
                     case 1 -> showRooms();
                     case 2 -> showRoomAvailability();
@@ -67,15 +72,18 @@ public class ReservationSystem {
         }
     }
 
+    //  Function menambah ruangan
     void tambahRuangan() {
+
+        // INPUT ID
         try {
             int id;
             while (true) {
                 System.out.print("Masukkan ID Kelas: ");
                 if (scanner.hasNextInt()) {
-                    id = scanner.nextInt();
-                    scanner.nextLine();
-                    if (isRoomIdUnique(id)) {
+                    id = scanner.nextInt(); // Mengambil input dan dimasukkan didalam variable int
+                    scanner.nextLine(); // inputan
+                    if (isRoomIdUnique(id)) { // Memanggil func atau method is room unique id
                         break;
                     } else {
                         System.out.println("❌ ID sudah digunakan. Silakan masukkan ID lain.");
@@ -86,6 +94,7 @@ public class ReservationSystem {
                 }
             }
 
+            // INPUT NAMA
             String name;
             while (true) {
                 System.out.print("Masukkan Nama Kelas: ");
@@ -96,6 +105,7 @@ public class ReservationSystem {
                 System.out.println("❌ Nama kelas tidak boleh kosong.");
             }
 
+            // INPUT CAPACITY
             int capacity;
             while (true) {
                 System.out.print("Masukkan Kapasitas Kelas: ");
@@ -112,7 +122,7 @@ public class ReservationSystem {
                     scanner.nextLine();
                 }
             }
-
+            // INPUT KELAS GRATIS / TIDAK GRATIS
             boolean isFree;
             while (true) {
                 System.out.print("Apakah kelas ini gratis? (ya/tidak): ");
@@ -124,6 +134,7 @@ public class ReservationSystem {
                 System.out.println("❌ Harap masukkan 'ya' atau 'tidak'.");
             }
 
+            // INPUT HARGA
             double price = 0;
             if (!isFree) {
                 while (true) {
@@ -153,12 +164,15 @@ public class ReservationSystem {
         }
     }
 
+    // FUNCTION check id ruangan apakah ada id ruangan yang tabrakan atau belum digunakan?
     private boolean isRoomIdUnique(int id) {
         return rooms.stream().noneMatch(room -> room.getId() == id);
-    }
+    } // akan return false jika sudah ada id ruangan yang menggunakan itu , dan true jika tidak ada yang menggunakannnay
 
+
+    // function hapus ruangan
     void hapusRuangan() {
-        showRooms();
+        showRooms(); // panggil function show room
         System.out.print("Pilih nomor ruangan yang ingin dihapus: ");
         int index = scanner.nextInt();
         scanner.nextLine();
@@ -170,6 +184,7 @@ public class ReservationSystem {
         }
     }
 
+    // Function memperlihatkan list semua ruangan
     void showRooms() {
         if (rooms.isEmpty()) {
             System.out.println("Belum ada ruangan.");
@@ -180,6 +195,7 @@ public class ReservationSystem {
         }
     }
 
+    // Function memperlihatkan semua reservasi
     void showAllReservations() {
         if (reservations.isEmpty()) {
             System.out.println("Belum ada reservasi.");
@@ -190,16 +206,17 @@ public class ReservationSystem {
         }
     }
 
+    // Function buat reservasi
     public void makeReservation(AbstractUser user) {
         try {
-            if (rooms.isEmpty()) {
+            if (rooms.isEmpty()) { // Jika ruangan kosong
                 System.out.println("❌ Belum ada ruangan tersedia.");
                 return;
             }
 
             showRooms();
 
-            int roomIndex;
+            int roomIndex; // Variable menyimpan ruangan
             while (true) {
                 System.out.print("Pilih nomor ruangan (1-" + rooms.size() + "): ");
                 if (scanner.hasNextInt()) {
@@ -227,6 +244,7 @@ public class ReservationSystem {
                 System.out.println("❌ Format tanggal tidak valid. Gunakan format yyyy-mm-dd");
             }
 
+            // Variable String menyimpan jam masuk dan jam mulai
             String startTime, endTime;
             while (true) {
                 System.out.print("Jam mulai (HH:mm): ");
@@ -258,6 +276,7 @@ public class ReservationSystem {
                 }
             }
 
+            // Object
             Reservation newReservation = new Reservation(user, selectedRoom, date, startTime, endTime);
 
             if (selectedRoom.isFree()) {
@@ -339,8 +358,10 @@ public class ReservationSystem {
         }
     }
 
+    // FUNCTION Proses pembayaran
     void processPayment(AbstractUser user) {
-        List<Reservation> userUnpaid = new ArrayList<>();
+        List<Reservation> userUnpaid = new ArrayList<>(); // ArrayList user belum bayar
+
 
         for (Reservation r : reservations) {
             boolean isPaid = false;
@@ -440,10 +461,12 @@ public class ReservationSystem {
         }
     }
 
+    // Universally unique identifier
     private String generatePaymentCode() {
         return "PAY-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
+    // Collection dengan java array list
     public List<Room> getRooms() {
         return this.rooms;
     }
