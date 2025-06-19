@@ -1,5 +1,6 @@
 <h1>Kelompok 7</h1>
 <h3>Submission Tugas Besar DPBO</h3>
+Aplikasi Sistem Reservasi Online adalah platform berbasis web yang memungkinkan pengguna untuk melakukan pemesanan layanan secara daring, dengan mudah, cepat, dan aman.
 <p>Anggota</p>
 <ul>
   <li>Genta Halilintar - 103022400067</li>
